@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wave Echo Cave - DM's Interactive Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .nav-link.active {
+      background-color: #BFDBFE;
+      color: #1E3A8A;
+    }
+
+    .stat-block {
+      background-color: #F3F4F6;
+      border: 1px solid #D1D5DB;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    .stat-block h4 {
+      font-size: 1.1em;
+      color: #1F2937;
+      margin-bottom: 6px;
+    }
+
+    .stat-block p {
+      margin-bottom: 4px;
+      font-size: 0.95em;
+    }
+
+    .stat-block strong {
+      color: #4B5563;
+    }
+
+    .boxed-text {
+      background-color: #FEFCE8;
+      border: 1px solid #FDE68A;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-style: italic;
+      color: #713F12;
+      display: grid;
+    }
+
+    .reactive-checks strong,
+    .element-heading strong {
+      color: #6D28D9;
+    }
+
+    .gm-notes {
+      background-color: #E5E7EB;
+      border-left: 4px solid #6B7280;
+      padding: 10px;
+      margin-top: 16px;
+      color: #4B5563;
+      font-size: 0.9em;
+    }
+
+    .element-block {
+      border: 1px solid #D1D5DB;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      background-color: #FFFFFF;
+    }
+
+    .element-block h4 {
+      font-size: 1.25rem;
+      font-semibold;
+      color: #3B82F6;
+      margin-bottom: 8px;
+    }
+
+    .nav-container {
+      position: sticky;
+      top: 0;
+      background-color: #F9FAFB;
+      z-index: 10;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .main-content-area {
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* Chart container styling */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      /* Default max-width */
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      /* Base height */
+      max-height: 400px;
+      /* Max height */
+    }
+
+    @media (min-width: 768px) {
+
+      /* md */
+      .chart-container {
+        height: 350px;
+        max-width: 700px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+
+      /* lg */
+      .chart-container {
+        height: 400px;
+        max-width: 800px;
+      }
+    }
+
+    /* Tailwind color classes for palette */
+    .bg-primary-bg {
+      background-color: #FDFBF5;
+    }
+
+    /* Warm Neutral Background */
+    .text-primary-text {
+      color: #4A4039;
+    }
+
+    /* Darker Warm Neutral for text */
+    .bg-secondary-bg {
+      background-color: #EAE0D5;
+    }
+
+    /* Complementary Neutral for secondary areas */
+    .text-secondary-text {
+      color: #5D524A;
+    }
+
+    .border-accent {
+      border-color: #C6AC8F;
+    }
+
+    /* Subtle Accent for borders/highlights */
+    .text-accent {
+      color: #A88B67;
+    }
+
+    /* Subtle Accent for text highlights */
+    .bg-interactive {
+      background-color: #A88B67;
+    }
+
+    /* Subtle Accent for buttons (can be toned down) */
+    .text-interactive-fg {
+      color: #FFFFFF;
+    }
+
+    .nav-link.active {
+      background-color: #D1C3B1;
+      color: #4A4039;
+    }
+
+    .area-image {
+      max-width: 300px;
+      max-height: 200px;
+      float: left;
+      margin: 0 16px 16px 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .area-link {
+      color: #A88B67;
+      text-decoration: none;
+    }
+
+    .area-link:hover {
+      text-decoration: underline;
+    }
+
+    .dark-mode {
+      background-color: #1E293B;
+      color: #E2E8F0;
+    }
+
+    .dark-mode .nav-container {
+      background-color: #334155;
+      border-color: #475569;
+    }
+
+    .dark-mode .nav-link {
+      color: #CBD5E1;
+    }
+
+    .dark-mode .nav-link.active {
+      background-color: #475569;
+      color: #E2E8F0;
+    }
+
+    .dark-mode .area-image {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .dark-mode .stat-block {
+      background-color: #475569;
+      border-color: #64748B;
+    }
+
+    .dark-mode .stat-block h4 {
+      color: #93C5FD;
+    }
+
+    .dark-mode .stat-block p {
+      color: #D1D5DB;
+    }
+
+    .dark-mode .stat-block strong {
+      color: #BFDBFE;
+    }
+
+    .dark-mode .text-primary-text {
+      color: #E2E8F0;
+    }
+
+    .dark-mode .text-secondary-text {
+      color: #A1A1AA;
+    }
+
+    .dark-mode .bg-primary-bg {
+      background-color: #1E293B;
+    }
+
+    .dark-mode .boxed-text {
+      background-color: #374151;
+      border-color: #475569;
+      color: #D1D5DB;
+    }
+
+    .dark-mode .gm-notes {
+      background-color: #475569;
+      border-left-color: #64748B;
+      color: #CBD5E1;
+    }
+
+    .dark-mode .element-block {
+      background-color: #1F2937;
+      border-color: #475569;
+    }
+
+    .dark-mode .element-block h4 {
+      color: #60A5FA;
+    }
+
+    .dark-mode .area-link {
+      color: #93C5FD;
+    }
+
+    .dark-mode .area-link:hover {
+      color: #BFDBFE;
+    }
+
+    .dark-mode .bg-interactive {
+      background-color: #A78BFA;
+    }
+    .dark-mode .text-interactive-fg {
+      color: #FFFFFF;
+    }
+    .dark-mode .bg-secondary-bg {
+      background-color: #334155;
+    }
+    .dark-mode .text-accent {
+      color: #FBBF24;
+    }
+    .dark-mode .border-accent {
+      border-color: #FBBF24;
+    }
+    .dark-mode .text-accent {
+      color: #FBBF24;
+    }
+
+    .dark-mode .marching-order-grid {
+      background-color: #1F2937;
+    }
+    .dark-mode .marching-order-grid input {
+      background-color: #374151;
+      color: #424549;
+      border: 1px solid #475569;
+    }
+    .dark-mode .marching-order-grid input::placeholder {
+      color: #9090c0;
+    }
+    .dark-mode .marching-order-grid input:focus {
+      outline: none;
+      border-color: #60A5FA;
+    }
+    .dark-mode .marching-order-grid input:focus::placeholder {
+      color: #93C5FD;
+    }
+    .dark-mode .bg-white {
+      background-color: #374151;
+    }
+    .dark-mode .bg-gray-200 {
+      background-color: #284874;
+    }
+  </style>
+</head>
+
+<body class="bg-primary-bg text-primary-text dark-mode">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <nav class="nav-container md:w-1/4 lg:w-1/5 p-4 border-r border-accent shadow-lg">
+      <h1 class="text-2xl font-bold text-accent mb-6 text-center">Wave Echo Cave</h1>
+      <button id="dark-mode-toggle" class="block w-full p-2 mb-4 text-center rounded-md bg-interactive text-interactive-fg hover:bg-accent transition-colors duration-150">
+        Toggle Dark Mode
+      </button>
+      <ul id="navigation" class="space-y-1">
+      </ul>
+    </nav>
+
+    <main id="main-content" class="main-content-area md:w-3/4 lg:w-4/5 p-4 md:p-8">
+      <div id="welcome-message" class="text-center">
+        <h2 class="text-3xl font-semibold text-primary-text mb-4">Welcome, Dungeon Master!</h2>
+        <p class="text-lg text-secondary-text">Select an area from the navigation to view its details.</p>
+        <p class="text-md text-secondary-text mt-2">This guide is updated based on Keith Amman's "How to Run a Room"
+          principles for a richer D&D experience.</p>
+      </div>
+      <div id="area-content-display" class="content-section">
+      </div>
+    </main>
+
+    <!-- Dungeon Turn Tracker Sidebar -->
+    <aside id="dungeon-turn-sidebar" class="w-full md:w-80 lg:w-96 p-4 border-l border-accent bg-secondary-bg flex-shrink-0" style="min-width:320px;">
+      <h2 class="text-xl font-bold mb-2">Dungeon Turn Tracker</h2>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1">Current Turn: <span id="turn-number">1</span></label>
+        <button id="advance-turn" class="bg-interactive text-interactive-fg px-2 py-1 rounded hover:bg-accent mb-2">Advance Turn</button>
+        <button id="reset-turns" class="ml-2 px-2 py-1 rounded bg-gray-300 hover:bg-gray-400 text-gray-800" style="font-size:0.9em;">Reset</button>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1">Encounter Check</label>
+        <button id="encounter-check" class="bg-interactive text-interactive-fg px-2 py-1 rounded hover:bg-accent">Roll 1d8</button>
+        <span id="encounter-result" class="ml-2 font-bold"></span>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1">Effect Trackers</label>
+        <div id="effect-list"></div>
+        <form id="add-effect-form" class="flex flex-col gap-1 mt-2">
+          <input id="effect-name" type="text" placeholder="Effect (e.g. Torch)" class="border rounded px-2 py-1" required>
+          <input id="effect-duration" type="number" min="1" placeholder="Duration (10 min increments)" class="border rounded px-2 py-1" required>
+          <button type="submit" class="bg-interactive text-interactive-fg px-2 py-1 rounded hover:bg-accent mt-1">Add Effect</button>
+        </form>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1">Marching Order</label>
+        <div id="marching-order-grid" class="grid grid-cols-3 gap-1 mb-2" style="width:180px;">
+          <!-- 3x9 grid will be rendered here -->
+        </div>
+        <form id="add-character-form" class="flex gap-1">
+          <input id="character-name" type="text" placeholder="Name" class="border rounded px-2 py-1" required>
+          <button type="submit" class="bg-interactive text-interactive-fg px-2 py-1 rounded hover:bg-accent">Add</button>
+        </form>
+        <div id="character-list" class="mt-2 text-xs"></div>
+      </div>
+      <div class="mb-2">
+        <button id="save-state" class="bg-interactive text-interactive-fg px-2 py-1 rounded hover:bg-accent">Save State</button>
+        <button id="load-state" class="ml-2 px-2 py-1 rounded bg-gray-300 hover:bg-gray-400 text-gray-800" style="font-size:0.9em;">Load State</button>
+      </div>
+      <div class="text-xs mt-2">
+        <strong>Dungeon Turn Steps:</strong>
+        <ol class="list-decimal ml-4">
+          <li>Mark ticks (time, resources, effects)</li>
+          <li>Encounter check (1d8, 1=encounter)</li>
+          <li>Players declare actions</li>
+          <li>Perception/observation checks</li>
+          <li>Resolve actions</li>
+        </ol>
+        <div class="mt-1">Movement: up to 150 ft/turn. Marching order: 3x9 grid (front=top row).</div>
+      </div>
+    </aside>
+    <!-- End Dungeon Turn Tracker Sidebar -->
+  </div>
+
+  <script>
+    const areas = [
+      {
+        id: "area1",
+        name: "Area 1: Cave Entrance",
+        content: `
+                <div class="boxed-text">
+                    <p>You follow the hidden tunnel into a large, cool cavern. A natural pillar of rock supports the ceiling, and three large stalagmites rise from the stone floor. To the west, you see three bedrolls and a messy heap of mining supplies—sacks of flour, bags of salt, casks of salted meat, lanterns, flasks of lamp oil, pickaxes, and shovels. Amid the supplies, a humanoid form lies still. The northeastern section of the cavern has collapsed, forming a dark pit approximately ten feet wide; a sturdy hemp rope is tied around a nearby stalagmite and dangles down into the chasm.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 10:</strong> To notice that while the supplies are varied, some items like pickaxes and shovels appear well-used, while food supplies seem relatively untouched and are beginning to spoil. The area has a faint, lingering scent of woodsmoke, now cold.</li>
+                        <li><strong>WISDOM (PERCEPTION) - DC 12 (near the pit):</strong> To hear a faint, intermittent dripping sound from the bottom of the pit and notice the tunnels leading off from its base appear roughly hewn.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">DEAD DWARF (THARDEN)</h4>
+                        <p>The body is that of a male dwarf miner, clad in sturdy traveler's clothes, dead for at least a week. He wears a pair of finely crafted leather boots.</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>WISDOM (MEDICINE) - DC 12:</strong> Examining the body reveals the cause of death was multiple stab wounds, likely from small, sharp blades (such as daggers or shortswords). The wounds seem to have been inflicted quickly and viciously.</li>
+                            <li><strong>Treasure:</strong> Tharden wears a pair of <em>boots of striding and springing</em>.</li>
+                        </ul>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">DWARVES' SUPPLIES</h4>
+                        <p>The supplies are potentially useful (flour, salt, salted meat, lanterns, oil, tools) but not particularly valuable in terms of coin. They appear to have been ransacked or hastily searched.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">OPEN PIT</h4>
+                        <p>The pit is twenty feet deep. The sturdy hemp rope allows for safe descent and ascent without a check. Climbing up or down the rough-hewn walls of the pit without a rope requires a successful DC 14 Strength (Athletics) check. A character who fails the check by 5 or more falls and takes 2d6 bludgeoning damage, landing prone at the bottom. The tunnel at the bottom of the pit leads <a href="#" class="area-link" data-area="area2">northwest toward area 2</a> and <a href="#" class="area-link" data-area="area3">east toward area 3</a>.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li>The tunnel at the bottom of the pit leads <a href="#" class="area-link" data-area="area2">northwest toward area 2</a> and <a href="#" class="area-link" data-area="area3">east toward area 3</a>.</li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This was the campsite of the Rockseeker brothers. The dead dwarf is Tharden, Gundren's brother, who was killed by the Black Spider. Gundren's other brother, Nundro, was here as well and is currently the Black Spider's prisoner in <a href="#" class="area-link" data-area="area20">area 20</a>. Nezznar overlooked the boots in his haste.</p>
+                </div>
+            `
+      },
+      {
+        id: "area2",
+        name: "Area 2: Mine Tunnels",
+        content: `
+                <div class="boxed-text">
+                    <p>This section of the mine consists of numerous intersecting passages, their ceilings only about six feet high. Many passages end in dead-ends or partially excavated rock faces. The air is stale and a faint, earthy scent of decay hangs in the air. It's noticeably cooler here than in the entrance cavern.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 13:</strong> To notice faint slime trails on the walls or floor in some passages, as if something large and amorphous has dragged itself through. The trails glisten faintly in any light.</li>
+                        <li><strong>INTELLIGENCE (NATURE) - DC 14 (if slime is spotted and examined):</strong> To identify the slime as characteristic of an ooze, likely an Ochre Jelly, known for its acidic properties and ability to split.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: LURKING OOZE(S)</h4>
+                        <p>An <strong>Ochre Jelly</strong> (2024 MM) lurks in one of the dead-end passages. When the party enters this section of the mine, the jelly begins to stalk the group, instinctively waiting for an opportunity to attack a lone target or ambush from a narrow passage or ceiling crevice.</p>
+                        <div class="stat-block">
+                            <h4>Ochre Jelly (CR 2)</h4>
+                            <p><strong>AC:</strong> 8, <strong>HP:</strong> 52</p>
+                            <p><strong>Attack (Pseudopod):</strong> +4 to hit, 3d6+2 acid damage.</p>
+                            <p><strong>Key Features:</strong> Amorphous, Spider Climb, Resistance to acid; Immunity to lightning, slashing; Condition Immunities (blinded, charmed, deafened, exhaustion, frightened, prone). Splits into two smaller jellies if takes slashing or lightning damage when it has at least 10 HP.</p>
+                        </div>
+                        <p class="mt-2"><strong>DM Option (Increased Challenge):</strong> Two Ochre Jellies, or one Ochre Jelly and 2-3 Gray Ooze Minions (FM rules: 1 HP, average damage, Corrode Metal).</p>
+                        <p class="mt-2"><strong>Tactics:</strong> The jelly uses the narrow, 6-foot high passages to its advantage. The low ceilings may impose disadvantage on attacks with certain large weapons. It will try to engulf a target if possible (if using stats that allow engulf) or focus acid attacks to corrode armor/weapons if that variant ability is used.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">DEAD-END PASSAGES</h4>
+                        <p>These are places where the original miners gave up and decided to move on to other spots. Some may contain loose rocks or minor cave-ins (no significant hazard unless deliberately disturbed).</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area3">Southeast tunnel to area 3</a></li>
+                        <li><a href="#" class="area-link" data-area="area6">East door to area 6</a></li>
+                        <li><a href="#" class="area-link" data-area="area9">North stairs to area 9</a></li>
+                        <li><a href="#" class="area-link" data-area="area10">Northwest tunnel to area 10</a></li>
+                        <li><a href="#" class="area-link" data-area="area1">South tunnel to area 1</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The Ochre Jelly is a natural hazard of the old mine, not directly placed by Nezznar, but it serves his purpose by making these tunnels dangerous to explore.</p>
+                </div>
+            `
+      },
+      {
+        id: "area3",
+        name: "Area 3: Old Entrance",
+        content: `
+                <div class="boxed-text">
+                    <p>Many tunnels intersect at this natural, thirty-foot-high cavern. The walls are carved with simple reliefs showing dwarf and gnome miners hard at work. Below them, nearly two dozen skeletons in rusted scraps of armor—both dwarf and orc remains—are scattered across the cavern floor. Half a dozen large brass lanterns stand in niches or on ledges around the cavern, but none are lit. A faint, leathery, and slightly metallic scent hangs in the air.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 14:</strong> To spot small, dark shapes clinging to the shadowy recesses of the 30-foot high ceiling, almost like large bats. They are very still. (This check is contested by the Stirges' Stealth if they are actively hiding).</li>
+                        <li><strong>INTELLIGENCE (HISTORY) - DC 12:</strong> To recognize that the style of armor on the skeletons and the carvings of miners date back several centuries, to the time of the Phandelver's Pact.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: STIRGES</h4>
+                        <p>Clinging to the ceiling like bats are eight <strong>Stirges</strong> (2024 MM). The monsters find scant living prey in the mines and are ravenous. If the characters are looking down at the skeletons on the floor, the Stirges are likely get the drop on them.</p>
+                        <div class="stat-block">
+                            <h4>Stirge (CR 1/8)</h4>
+                            <p><strong>AC:</strong> 13, <strong>HP:</strong> 5</p>
+                            <p><strong>Attack (Proboscis):</strong> +5 to hit, 1d6+3 piercing damage. If it hits, the stirge attaches. While attached, the stirge doesn't attack. Instead, at the start of each of the stirge's turns, the target loses 2d4 necrotic damage due to blood loss.</p>
+                            <p><strong>Key Features:</strong> Darkvision, Fly 40 ft.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> Any character who isn't watching the ceiling is surprised unless their passive Wisdom (Perception) score is higher than the Stirges' Dexterity (Stealth) check total (roll once for all of them: d20+3). Characters who aren't surprised hear a chorus of sharp flapping noises as the Stirges descend to attack, aiming to attach to the nearest warm-blooded creature.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">SKELETAL REMAINS & CARVINGS</h4>
+                        <p>The skeletons are too damaged and old to be animated. The carvings depict scenes of camaraderie between dwarves and gnomes, mining precious metals and gems, and fending off goblinoid creatures. The lanterns are tarnished but intact; with oil and new wicks, they could be made functional.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area2">Northwest tunnel to area 2</a></li>
+                        <li><a href="#" class="area-link" data-area="area6">North door to area 6</a></li>
+                        <li><a href="#" class="area-link" data-area="area7">Northwest tunnel towards area 7</a></li>
+                        <li><a href="#" class="area-link" data-area="area8">East tunnel to area 8</a></li>
+                        <li><a href="#" class="area-link" data-area="area4">South tunnel with west door to area 4</a> and <a href="#" class="area-link" data-area="area5">east door to area 5</a>.</li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The lanterns and the carvings of miners at work were meant as a welcome to newcomers in the mine's heyday. The battle here was fierce, a last stand for some of the mine's defenders against the orc invasion.</p>
+                </div>
+            `
+      },
+      {
+        id: "area4",
+        name: "Area 4: Old Guardroom",
+        content: `
+                <div class="boxed-text">
+                    <p>Splintered stone benches and heaps of rubble from a partially collapsed ceiling fill this small guardroom. Amid ruined stone bunks and toppled weapon racks, the bones of several dwarves and orcs lie scattered. The air is dusty and still, with a faint, dry scent of ancient decay.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 12:</strong> To notice that some of the bones seem arranged in an almost unnatural stillness, not quite settled like the others amidst the rubble. A faint scraping sound might be heard if the room is entered quietly.</li>
+                        <li><strong>INTELLIGENCE (INVESTIGATION) - DC 13 (if examining weapon racks):</strong> To find a few salvageable but rusty arrowheads or a broken spear haft, suggesting this room was stripped of useful gear long ago.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: ANIMATED DEAD</h4>
+                        <p>In the round after any living creature enters this chamber, the bones begin to stir and knit together, forming six <strong>Skeletons</strong> (2024 MM) and one <strong>Minotaur Skeleton</strong> (2024 MM).</p>
+                        <div class="stat-block">
+                            <h4>Skeleton (CR 1/4)</h4>
+                            <p><strong>AC:</strong> 14, <strong>HP:</strong> 13</p>
+                            <p><strong>Attack (Shortsword or Shortbow):</strong> +5 to hit, 1d6+3 piercing damage.</p>
+                            <p><strong>Key Features:</strong> Darkvision, Vulnerability to bludgeoning; Immunity to poison, exhaustion.</p>
+                        </div>
+                        <div class="stat-block mt-2">
+                            <h4>Minotaur Skeleton (CR 2)</h4>
+                            <p><strong>AC:</strong> 12 (natural armor), <strong>HP:</strong> 67</p>
+                            <p><strong>Attack (Greataxe):</strong> +6 to hit, 1d12+4 slashing damage.</p>
+                            <p><strong>Gore:</strong> +6 to hit, 1d8+4 piercing damage.</p>
+                            <p><strong>Charge:</strong> If moves 10 ft. straight toward a target and hits with Gore, target takes extra 2d8 piercing damage and must succeed DC 14 Str save or be pushed 10 ft. and knocked prone.</p>
+                            <p><strong>Key Features:</strong> Darkvision, Vulnerability to bludgeoning; Immunity to poison, exhaustion.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> The skeletons and Minotaur Skeleton fight until destroyed. The Minotaur Skeleton will Charge the most imposing or closest character. The other Skeletons will attempt to support it or engage other targets. They use the rubble for cover where possible.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">RUBBLE AND RUINED FURNISHINGS</h4>
+                        <p>The rubble provides half cover in several spots. Searching the ruined bunks or weapon racks (DC 14 Intelligence (Investigation)) might yield a forgotten waterskin (empty) or a few copper pieces, but nothing of significant value remains.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area3">East door to area 3</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This guardroom was overrun early in the fighting when the orcs attacked. The lingering necromantic energies of the dungeon, or perhaps Mormesk's influence (Area 14), animate these remains when disturbed.</p>
+                </div>
+            `
+      },
+      {
+        id: "area5",
+        name: "Area 5: Assayers’ Office",
+        content: `
+                <div class="boxed-text">
+                    <p>This small chamber appears to have once been an office or storeroom. A large stone counter bisects the room, set with three dusty iron balance scales. Cubbyholes carved into the north wall are stuffed with faded, dusty paper scraps. The air is thick with the smell of old paper and dust. Several long-dead corpses—gnomes and orcs by their look—are sprawled across the floor, their bones picked clean.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 11:</strong> To notice that one of the gnomish corpses clutches a small, almost completely disintegrated leather pouch.</li>
+                        <li><strong>INTELLIGENCE (INVESTIGATION) - DC 13 (if examining the counter):</strong> To see that the counter itself seems unusually sturdy and one section near the floor looks slightly different in construction, perhaps indicating a hidden compartment or strongbox.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">PAPER SCRAPS & CUBBYHOLES</h4>
+                        <p>The centuries-old paper in the cubbyholes disintegrates if touched carelessly. A character who carefully handles them and reads Dwarvish or Gnomish can see faint markings on a few scraps, recording weigh-ins of ore and disbursements of coin. A successful DC 14 Intelligence (Investigation) check while sifting through the scraps reveals one partially intact page detailing payment schedules, signed with a symbol recognizable (DC 12 Intelligence (History)) as belonging to the Phandelver mining consortium.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">CORPSES</h4>
+                        <p>The gnomes and orcs appear to have died fighting each other. The gnomish corpse clutching the pouch (if spotted) has nothing of value in it; the pouch itself crumbles to dust if handled roughly.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">IRON STRONGBOX (TREASURE)</h4>
+                        <p>Behind the counter, set into its base or hidden beneath a loose flagstone (if the Investigation check above was successful, or if the party searches thoroughly), is a locked iron strongbox. Opening it requires thieves' tools and a successful DC 18 Dexterity check. This pay chest was overlooked in the fighting and contains 600 cp, 180 sp, 90 ep, and 60 gp.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area3">West door to area 3</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The mine's assayers worked here, weighing and assessing ore samples and paying the miners for their labor. The office was a scene of desperate fighting during the orc invasion.</p>
+                </div>
+            `
+      },
+      {
+        id: "area6",
+        name: "Area 6: South Barracks",
+        content: `
+                <div class="boxed-text">
+                    <p>Old stone bunks in orderly rows line the walls of this chamber. A corroded iron brazier full of old coals stands near the middle of the room. The air is heavy with a carrion stench. Scraps of armor and the bones of a half-dozen dwarves and orcs lie strewn about. Hunched among the remains are three gray, gaunt figures, pawing at the scraps and gnawing on old bones. They look up with glowing eyes as you enter, a low snarl emanating from them.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 12 (if listening at the partially open door before entering):</strong> To hear faint crunching, splintering, and wet tearing sounds from within.</li>
+                        <li><strong>INTELLIGENCE (RELIGION OR NATURE) - DC 13 (upon seeing the figures):</strong> To recognize the creatures as Ghouls, undead monstrosities driven by an insatiable hunger for humanoid flesh.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: GHOULS</h4>
+                        <p>Three <strong>Ghouls</strong> (2024 MM) from the pack in area 9 are here, cracking and gnawing on the ancient bones of the fallen in the vain hope that some tasty morsel of marrow remains. The ghouls, eager for a fresh meal, attack immediately.</p>
+                        <div class="stat-block">
+                            <h4>Ghoul (CR 1)</h4>
+                            <p><strong>AC:</strong> 12, <strong>HP:</strong> 22</p>
+                            <p><strong>Multiattack:</strong> Two Bite attacks OR one Claw attack.</p>
+                            <p><strong>Bite:</strong> +4 to hit, 1d6+2 piercing + 1d6 necrotic damage.</p>
+                            <p><strong>Claw:</strong> +4 to hit, 1d4+2 slashing. If target is a creature other than an elf or undead, it must succeed on a DC 10 Constitution saving throw or be paralyzed until the end of its next turn.</p>
+                            <p><strong>Key Features:</strong> Darkvision, Immunity to charmed, exhaustion, poison.</p>
+                        </div>
+                        <p class="mt-2"><strong>DM Option (Increased Challenge):</strong> One of the Ghouls is a <strong>Ghast</strong> (2024 MM, CR 2), its Stench (DC 10 Con save or poisoned while within 10 ft) adding another layer of difficulty.</p>
+                        <p class="mt-2"><strong>Tactics:</strong> The Ghouls will try to overwhelm a single target, using their Claws to paralyze and then feasting with their Bites. If a Ghast is present, it will try to keep multiple PCs within its Stench aura.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">OLD BUNKS AND BRAZIER</h4>
+                        <p>The stone bunks are bare. The brazier is cold and contains only ash and charcoal remnants.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area2">West door to area 2</a></li>
+                        <li><a href="#" class="area-link" data-area="area3">South door to area 3</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This was a miners' barracks. The Ghouls are part of a larger pack that infests this part of Wave Echo Cave, drawn by the lingering scent of death and despair.</p>
+                </div>
+            `
+      },
+      {
+        id: "area7",
+        name: "Area 7: Ruined Storeroom",
+        content: `
+                <div class="boxed-text">
+                    <p>The eastern wall of this chamber has collapsed into a mass of rubble, exposing the rough-hewn rock of the cavern beyond. To the north, a sturdy-looking wooden door stands ajar, leading into what appears to be a smaller storeroom. Dust motes dance in the dim light filtering from your light source.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 10:</strong> To notice the northern storeroom seems relatively intact compared to the ruined main chamber. The door, though ajar, looks solid.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">NORTHERN STOREROOM</h4>
+                        <p>This good-sized storeroom has dusty wooden kegs tucked neatly against its walls. All of them are cracked and split open from age, their contents long evaporated. The storeroom door is in good shape and can easily be blocked or barred from the inside.</p>
+                        <p class="mt-2"><strong>Resting Place:</strong> It's not comfortable, but the storeroom is a secure resting place. No monsters come this way (unless drawn by excessive noise from the party).</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">COLLAPSED EASTERN WALL</h4>
+                        <p>The rubble is unstable. Trying to climb over it or clear it would be noisy and time-consuming, potentially attracting unwanted attention from other areas. There's no obvious passage through the collapse.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area3">South tunnel to area 3</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This area provides a much-needed safe haven for the party if they need to take a short rest. Emphasize its security if they choose to use it.</p>
+                </div>
+            `
+      },
+      {
+        id: "area8",
+        name: "Area 8: Fungi Cavern",
+        content: `
+                <div class="boxed-text">
+                    <p>This large cavern is filled with a bizarre spectacle of fungal life. Dense carpets of weird fungi cover large sections of the floor, including puffballs a foot across, strange shelf fungus growing on stalagmites, and large, fleshy stalks and caps easily five feet tall. Some of_the puffballs and cap fungi glow with an eerie green phosphorescence, bathing parts of the cavern in a dim, pulsating light. The air is damp and smells strongly of mildew and something else, faintly acrid.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 13:</strong> To notice that the air shimmers faintly above the carpets of smaller fungi, and that some of the larger stalks occasionally twitch or sway as if reacting to air currents, or perhaps something else.</li>
+                        <li><strong>INTELLIGENCE (NATURE) - DC 14:</strong> To recognize some of the fungi as potentially hazardous, such as those known to release spores or toxins when disturbed. The green phosphorescence is likely bioluminescent, but the acrid undertone in the smell is concerning.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">POISON GAS HAZARD</h4>
+                        <p>Most of the fungi is harmless, and the green-glowing fungi allow creatures to see the entire cavern without the aid of darkvision or a light source. However, whenever a creature attempts to cross the cavern by moving through the dense carpets of fungi (which cover most of the floor), the fungi release poisonous gas into the air.</p>
+                        <p class="mt-1">Each creature in the cavern must succeed on a <strong>DC 13 Constitution saving throw</strong> or take <strong>4d6 poison damage</strong> and be <strong>Poisoned</strong> for 10 minutes. The gas disperses after 1 minute, but until then, any living creature that ends its turn in the cavern (specifically in an area where the gas was released that round) must repeat the saving throw.</p>
+                        <p class="mt-1"><strong>Avoiding the Gas:</strong> Characters might try to avoid the carpets by sticking to rockier patches, climbing over larger fungi (DC 12 Athletics or Acrobatics, failure might mean landing in a gas-releasing patch), or using magical means of traversal.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">OPTIONAL CREATURES: VIOLET FUNGI</h4>
+                        <p>Hidden amongst the other fungi are 2-3 <strong>Violet Fungi</strong> (2024 MM, CR 1/4). They are stationary but will lash out with their rotting touch (Attack +3, 1d8 necrotic + target must succeed DC 10 Con save or be poisoned for 1 minute) if a creature comes within 10 feet.</p>
+                         <div class="stat-block">
+                            <h4>Violet Fungus (CR 1/4)</h4>
+                            <p><strong>AC:</strong> 5, <strong>HP:</strong> 18</p>
+                            <p><strong>Multiattack:</strong> Makes 1d4 Rotting Touch attacks.</p>
+                            <p><strong>Rotting Touch:</strong> +3 to hit, reach 10 ft., one creature. Hit: 4 (1d8) necrotic damage, and the target must succeed on a DC 10 Constitution saving throw or be poisoned for 1 minute. The poisoned target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>
+                            <p><strong>Key Features:</strong> False Appearance (indistinguishable from ordinary fungus while motionless).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area3">West tunnel to area 3</a></li>
+                        <li><a href="#" class="area-link" data-area="area9">North tunnel to area 9</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This cave has hindered Nezznar's explorations. The drow suspects that the mine's magic workshops are close by, but he's reluctant to risk dealing with the monsters and hazards here. The phosphorescent fungi are beautiful but belie the danger.</p>
+                </div>
+            `
+      },
+      {
+        id: "area9",
+        name: "Area 9: Great Cavern",
+        content: `
+                 <div class="boxed-text">
+                    <p>Steep escarpments divide this vast cavern into three sections—high ledges at either end, and a lower section in the middle. Carved stone stairs climb up to the ledges. Two large, overturned stone tables lie in the middle section, along with a pair of cold, dented braziers. A smaller, intact table stands on the eastern ledge. The skeletal remains of dozens of dead warriors—dwarves, gnomes, orcs, and even a couple of hulking ogres—attest to the fierceness of the fighting that took place here long ago. The air is stale and carries a faint, but pervasive, charnel scent.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 14:</strong> To notice movement in the deep shadows on the western ledge – fleeting glimpses of gaunt shapes or glowing eyes. A low, almost sub-audible growl might be heard. (This DC is higher if the party is making noise or carrying bright lights without attempting stealth).</li>
+                        <li><strong>INTELLIGENCE (HISTORY) - DC 13:</strong> The variety of skeletal remains and the scale of the battle implied suggest this was a major conflict point, likely part of the final battles for Wave Echo Cave.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: GHOUL PACK</h4>
+                        <p>Five <strong>Ghouls</strong> (2024 MM) and one <strong>Ghast</strong> (2024 MM) lurk in the shadows on the western ledge. The Ghast is their leader. They notice any light or noise elsewhere in the cave and quickly bound down (or climb down the escarpment) to attack. The undead are hungry and fight until destroyed.</p>
+                        <div class="stat-block">
+                            <h4>Ghoul (CR 1) - 5 present</h4>
+                            <p><strong>AC:</strong> 12, <strong>HP:</strong> 22</p>
+                            <p><strong>Multiattack:</strong> Two Bite attacks OR one Claw attack.</p>
+                            <p><strong>Bite:</strong> +4 to hit, 1d6+2 piercing + 1d6 necrotic damage.</p>
+                            <p><strong>Claw:</strong> +4 to hit, 1d4+2 slashing. If target is a creature other than an elf or undead, it must succeed on a DC 10 Constitution saving throw or be paralyzed until the end of its next turn.</p>
+                        </div>
+                        <div class="stat-block mt-2">
+                            <h4>Ghast (CR 2) - 1 present</h4>
+                            <p><strong>AC:</strong> 13, <strong>HP:</strong> 36</p>
+                            <p><strong>Multiattack:</strong> One Bite attack and one Claw attack.</p>
+                            <p><strong>Bite:</strong> +5 to hit, 2d8+3 piercing damage.</p>
+                            <p><strong>Claw:</strong> +5 to hit, 2d6+3 slashing. If target is a creature other than an elf or undead, it must succeed on a DC 10 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>
+                            <p><strong>Stench:</strong> Any creature that starts its turn within 10 feet of the ghast must succeed on a DC 10 Constitution saving throw or be poisoned until the start of its next turn. On a successful saving throw, the creature is immune to the ghast's Stench for 24 hours.</p>
+                            <p><strong>Turning Defiance:</strong> The ghast and any ghouls within 30 feet of it have advantage on saving throws against effects that turn undead.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> The Ghast will try to keep its Stench aura affecting multiple PCs. The Ghouls will swarm targets, prioritizing any that appear isolated or vulnerable, especially those affected by the Stench or paralyzed.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">ESCARPMENTS & STAIRS</h4>
+                        <p>The escarpments are 10 feet high and require a successful DC 13 Strength (Athletics) check to climb without using the stairs. A creature that falls or is knocked from the top of a ledge takes 1d6 bludgeoning damage and lands prone. The stone stairs are sturdy.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">FURNISHINGS & REMAINS</h4>
+                        <p>The tables are heavy stone and overturned, providing half cover. The braziers are empty. Searching the numerous skeletal remains (DC 15 Wisdom (Perception)) might yield a few tarnished coins (2d10 sp, 1d6 gp total) or a cracked gemstone worth 5 gp, but nothing of significant value.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area2">South stairs to area 2</a></li>
+                        <li><a href="#" class="area-link" data-area="area8">South tunnel to area 8</a></li>
+                        <li><a href="#" class="area-link" data-area="area10">West tunnel to area 10</a></li>
+                        <li><a href="#" class="area-link" data-area="area11">Northwest tunnel to area 11</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This cave once served as the banquet room, meeting area, and mead hall for the miners. The battle here was one of the last major engagements before the mine fell. The Ghast is an older, more cunning specimen that has established dominance over this pack.</p>
+                </div>
+            `
+      },
+      {
+        id: "area10",
+        name: "Area 10: Dark Pool",
+        content: `
+                <div class="boxed-text">
+                    <p>A still, dark pool of water fills much of this cavern. The water is murky, revealing little of what might lie within its depths. The shore of the pool consists of a thin layer of broken shells from strange, pale mussels, and a distinct fishy odor hangs in the air. A sluggish stream flows out of the cave to the northeast. You can see a passage leading south and a set of rough-hewn steps climbing up to the east.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 12:</strong> To notice a subtle ripple or disturbance on the surface of the pool from time to time, as if something moves beneath, or to spot small, pale, eyeless fish darting near the edges.</li>
+                        <li><strong>WISDOM (SURVIVAL) - DC 13:</strong> The mussels appear edible but are unlike any surface-world varieties. The fishy odor is strong, suggesting a significant aquatic population or decay.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">THE POOL</h4>
+                        <p>The pool is 20 feet deep in the middle. The water is cold and murky, limiting visibility to 5 feet (or 10 feet with a bright light source). The stream to the northeast is 3 feet deep, and the ceiling of the passage is 2 to 3 feet above the water. Characters can easily wade through the stream to area 18.</p>
+                        <p class="mt-1">A character who explores the pool (requiring swimming) finds an old skeleton lying on the bottom, 10 feet from the shore and under 10 feet of water. These are the remains of a human wizard from old Phandalin who died defending the mines against the orc attackers. Several orc arrows are still lodged in the skeleton's ribcage.</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>Treasure:</strong> The skeleton wears two platinum rings (75 gp each) and clutches a <em>wand of magic missiles</em> in its bony fingers.</li>
+                        </ul>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">OPTIONAL HAZARD/CREATURE: GIANT CRAB(S)</h4>
+                        <p>One or two <strong>Giant Crabs</strong> (2024 MM, CR 1/8) lurk in the murky depths of the pool. They are camouflaged amongst the rocks and shells on the bottom (Stealth +2 vs. Perception if characters are actively looking for threats in the water). They will attack anyone entering the water or spending too long at its edge, grabbing with their claws.</p>
+                        <div class="stat-block">
+                            <h4>Giant Crab (CR 1/8)</h4>
+                            <p><strong>AC:</strong> 15 (natural armor), <strong>HP:</strong> 13</p>
+                            <p><strong>Attack (Claw):</strong> +3 to hit, 1d4+1 bludgeoning damage, and target is grappled (escape DC 11). Has two claws, each can grapple one target.</p>
+                            <p><strong>Key Features:</strong> Amphibious, Darkvision (if applicable to crab).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area2">Southeast tunnel to area 2</a></li>
+                        <li><a href="#" class="area-link" data-area="area9">East tunnel to area 9</a></li>
+                        <li><a href="#" class="area-link" data-area="area11">North tunnel to area 11</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The wizard was one of the defenders of Phandelver's Pact, who fell back to this position trying to protect the Forge of Spells. The orcs shot him as he waded into the pool, perhaps trying to escape or hide something.</p>
+                </div>
+            `
+      },
+      {
+        id: "area11",
+        name: "Area 11: North Barracks",
+        content: `
+                <div class="boxed-text">
+                    <p>Old stone bunks line the walls of this former barracks. A glowing iron brazier in the middle of the room provides both light and a surprising amount of heat. The air smells of unwashed bodies and cooked meat. If entering from the west, you see another door across the room, crudely blocked by a barricade made from the remains of a wooden table and splintered bunk frames. Gruff voices can be heard speaking in Goblin from beyond the barricade if it's intact, or from within the room if it's already breached.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                         <li><strong>WISDOM (PERCEPTION) - DC 12 (if listening at either door before entry/breach):</strong> To hear guttural voices speaking Goblin, discussing rations, boredom, and complaining about the "stinky dead ones" from other parts of the mine.</li>
+                        <li><strong>INTELLIGENCE (INVESTIGATION) - DC 11 (if examining the glowing brazier):</strong> The brazier is indeed magical, radiating heat without consuming fuel. It appears to be an old dwarven or gnomish contraption.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: BUGBEARS</h4>
+                        <p>Three <strong>Bugbear Warriors</strong> (2024 MM) and one <strong>Bugbear Tyrant</strong> (*Flee, Mortals!*, CR 3) reside in this chamber. They are loyal minions of Nezznar. This room marks the front line in the Black Spider's assault on Wave Echo Cave, and the bugbears are here to prevent ghouls, zombies, or other undead from troubling their master in his lair (area 19).</p>
+                        <div class="stat-block">
+                            <h4>Bugbear Warrior (CR 1) - 3 present</h4>
+                            <p><strong>AC:</strong> 14 (hide armor), <strong>HP:</strong> 33</p>
+                            <p><strong>Attack (Morningstar):</strong> +4 to hit, 2d8+2 piercing damage.</p>
+                            <p><strong>Grab:</strong> +4 to hit, 2d6+2 bludgeoning damage, and target is grappled (escape DC 12). </p>
+                            <p><strong>Abduct:</strong> As a bonus action, the bugbear can move up to its speed, taking one Medium or smaller creature it is grappling with it. This movement doesn't provoke opportunity attacks from the grappled creature.</p>
+                            <p><strong>Key Features:</strong> Darkvision, Stealth +6, Surprise Attack (deals extra 2d6 damage on first turn of combat if it surprises a creature).</p>
+                        </div>
+                         <div class="stat-block mt-2">
+                            <h4>Bugbear Tyrant (FM, CR 3) - 1 present</h4>
+                            <p><strong>AC:</strong> 16 (chain mail), <strong>HP:</strong> (Approx. 65, consult FM for exact)</p>
+                            <p><strong>Attack (Maul):</strong> +5 to hit, 2d8+3 bludgeoning damage (adjust per FM).</p>
+                            <p><strong>Key Features:</strong> Darkvision, Stealth +4. Likely has command abilities (e.g., "Get 'Em, Lads!": Minions make an attack) and other martial prowess features. Consult *Flee, Mortals!* for specific abilities.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> The Bugbear Warriors will try to use their Grab and Abduct features to isolate PCs or drag them into difficult positions. The Bugbear Tyrant will direct the Warriors, use its own powerful attacks, and focus on characters who seem to be leaders or major threats. They removed the corpses they found here and built the barricade.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">BARRICADED DOOR (EASTERN)</h4>
+                        <p>The eastern door is barricaded from inside the room and requires a successful DC 20 Strength (Athletics) check to force open. If the characters try to force it, the Bugbears will be alerted and prepare an ambush.</p>
+                    </div>
+                     <div class="element-block">
+                        <h4 class="element-heading">TREASURE</h4>
+                        <p>The Bugbear Tyrant carries a pouch containing 15 cp, 13 ep, and a <em>potion of vitality</em>.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area9">Southeast tunnel to area 9</a></li>
+                        <li><a href="#" class="area-link" data-area="area10">South tunnel to area 10</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>Like area 6, this was formerly a barracks for miners. Nezznar's bugbears cleared it out. The glowing brazier is a relic of the mine's original enchantments and still functions perfectly.</p>
+                </div>
+            `
+      },
+      {
+        id: "area12",
+        name: "Area 12: Smelter Cavern",
+        content: `
+                <div class="boxed-text">
+                    <p>A massive blast furnace and a complex mechanical bellows powered by a large waterwheel dominate this large chamber. The furnace is cold and dark, but heaps of coal are piled nearby, along with carts full of unrefined ore. The waterwheel sits in a ten-foot-wide channel cut into the floor of the room, but the channel is currently dry. Passages exit to the west, south, and east. The empty channel also exits to the north and east. More than a dozen withered corpses in remnants of armor—both dwarven and orcish—are scattered around the room. Floating with an almost regal malevolence above them is a humanoid skull, engulfed in eerie green flame.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 13:</strong> To notice that while most corpses seem ancient, a few of the orc bodies appear more recently deceased, perhaps within the last few weeks, and show signs of charring or magical burns. The floating skull turns slowly, as if surveying its domain.</li>
+                        <li><strong>INTELLIGENCE (ARCANA) - DC 15:</strong> To recognize the floating, flaming skull as a Flameskull, a dangerous and intelligent undead creature created through dark necromantic rituals.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: UNDEAD GUARDIANS</h4>
+                        <p>Six of the fallen dwarf warriors are <strong>Zombies</strong> (2024 MM). They rise and pursue any living creatures that enter the room, but they do not pursue creatures outside this area for more than 1 round. In addition, a far more intelligent undead guards this area: a <strong>Flameskull</strong> (2024 MM).</p>
+                        <div class="stat-block">
+                            <h4>Zombie (CR 1/4) - 6 present</h4>
+                            <p><strong>AC:</strong> 8 (or 10 if DM buffs), <strong>HP:</strong> 15 (or 22 if using 2014 average)</p>
+                            <p><strong>Attack (Slam):</strong> +3 (or +4 if DM buffs) to hit, 1d6+1 (or 1d8+1) bludgeoning damage.</p>
+                            <p><strong>Undead Fortitude:</strong> If damage reduces the zombie to 0 HP, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 HP instead.</p>
+                        </div>
+                        <div class="stat-block mt-2">
+                            <h4>Flameskull (CR 4)</h4>
+                            <p><strong>AC:</strong> 13, <strong>HP:</strong> 40</p>
+                            <p><strong>Spellcasting (Int, DC 13, +5 to hit):</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>At will: <em>mage hand, fire bolt (2d10)</em></li>
+                                <li>3/day each: <em>magic missile (as 2nd level slot), shield</em></li>
+                                <li>1/day each: <em>flaming sphere, blur, fireball (8d6)</em></li>
+                            </ul>
+                            <p><strong>Multiattack:</strong> Two Fire Ray attacks.</p>
+                            <p><strong>Fire Ray:</strong> +5 to hit, range 30 ft., 3d6 fire damage.</p>
+                            <p><strong>Key Features:</strong> Fly 40 ft. (hover), Magic Resistance, Rejuvenation, Illumination. Immunities: Cold, Fire, Poison; Resistances: Lightning, Necrotic, Piercing.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> The Zombies will try to bog down melee combatants. The Flameskull was a servant of the human wizards allied with the Phandelver dwarves and gnomes, and it continues to act on ancient instructions to prevent intruders from passing through. It will use its spells intelligently, starting with *Fireball* or *Flaming Sphere* to control areas and then using Fire Rays. It will utilize its flight to stay out of easy reach.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">SMELTER EQUIPMENT & CHANNEL</h4>
+                        <p>This impressive chamber was the heart of the Wave Echo Cave mining operation. Here, the dwarves melted down their ore. The dry channel is where the dwarves diverted the stream from area 18 to power the waterwheel, which in turn operated the bellows. The channel's bottom is 5 feet below floor level, and no ability check is required to scramble in or out. Characters in the channel can follow it out of this room to the north or to the east, though the ceiling is only 5 feet high after the channel exits this room, requiring Medium creatures to squeeze.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area9">West tunnel to area 9</a></li>
+                        <li><a href="#" class="area-link" data-area="area13">South tunnel to area 13</a></li>
+                        <li><a href="#" class="area-link" data-area="area14">East tunnel to area 14</a></li>
+                        <li><a href="#" class="area-link" data-area="area17">North channel to area 17</a></li>
+                        <li><a href="#" class="area-link" data-area="area18">East channel to area 18</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>Like the fungi cavern at area 8, this chamber poses a serious obstacle that prevents Nezznar from reaching his objective—the Forge of Spells (area 15). The drow is still formulating a plan to get past the undead guardians. The Flameskull does not differentiate between Nezznar's forces and the PCs; all are intruders.</p>
+                </div>
+            `
+      },
+      {
+        id: "area13",
+        name: "Area 13: Starry Cavern",
+        content: `
+                <div class="boxed-text">
+                    <p>Glittering minerals embedded in the ceiling of this vast cavern catch and reflect your light, creating the breathtaking impression of a starry night sky. Dozens of skeletons—many crushed under fallen debris from the partially collapsed ceiling—are scattered across the floor. The air is still and carries a faint, almost electric tang. The cavern is large enough that it contains two freestanding stone structures. Each of these buildings is proportioned for human use, as opposed to the dwarf-sized doorways and furnishings you’ve seen elsewhere in the mines. Both structures have battered and blackened masonry walls, their double doors cracked and scorched. The cavern is divided by a low escarpment, into which a flight of stairs has been cut. Passages lead out of this area to the north, south, and west.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 12:</strong> To notice that the damage to the stone buildings seems to be from intense heat and concussive force, more so than simple decay. The scorch marks around the doors are deep.</li>
+                        <li><strong>INTELLIGENCE (ARCANA) - DC 14:</strong> Any character proficient in Arcana can sense a subtle but pervasive aura of magic in this cavern. A <em>detect magic</em> spell reveals the same. The aura becomes stronger as one approaches the northern building (area 15).</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CEILING MINERALS & DEBRIS</h4>
+                        <p>The glittering minerals in the ceiling are beautiful but are neither inherently magical nor particularly valuable if chipped away (mostly quartz and mica). The fallen debris creates patches of difficult terrain. The skeletons are too broken and scattered to pose a threat.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">STONE BUILDINGS</h4>
+                        <p>These structures are clearly of a different architectural style than the rest of the mine, suggesting they were additions made by non-dwarven allies. The southern building is Area 14 (Wizards' Quarters), and the northern building is Area 15 (Forge of Spells).</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area12">North tunnel to area 12</a></li>
+                        <li><a href="#" class="area-link" data-area="area14">South building to area 14</a></li>
+                        <li><a href="#" class="area-link" data-area="area15">North building to area 15</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The structural damage and the skeletal remains in this area are evidence of the destructive spell battle fought here centuries ago when the orcs and their mercenary wizards stormed the mines. This cavern was a central hub for the magical operations within Wave Echo Cave.</p>
+                </div>
+            `
+      },
+      {
+        id: "area14",
+        name: "Area 14: Wizards’ Quarters",
+        content: `
+                <div class="boxed-text">
+                    <p>The double doors leading into this stone building are cracked and warped, their iron hinges partially melted and twisted. Dust, ash, and walls blackened by fire greet you. Heaps of debris lie beneath a sagging ceiling, indicating this room was heavily damaged by a destructive blast. The furnishings—tables, chairs, bookshelves, and beds, all proportioned for human use—are charred or splintered but otherwise remarkably well preserved given the apparent devastation. Near the foot of one of the beds stands a scorched iron chest. A profound silence hangs in the air, heavy and cold.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 15:</strong> To feel an unnatural chill in the room that has nothing to do with the ambient temperature of the cave, and to glimpse fleeting, shadowy movements at the periphery of vision. A faint, almost inaudible whisper seems to echo from the walls.</li>
+                        <li><strong>INTELLIGENCE (ARCANA) - DC 13:</strong> The preservation of the furnishings, despite the scorch marks, suggests some form of magical warding might have partially protected them, or that the destructive force was a specific type of energy rather than simple fire.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">FORCING THE DOORS</h4>
+                        <p>Wrenching or smashing open the damaged doors requires a successful DC 15 Strength (Athletics) check. The noise will likely alert any occupant.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURE: MORMESK THE WRAITH</h4>
+                        <p>This room contains the restless spirit of the last wizard to die here: <strong>Mormesk the Wraith</strong> (2024 MM). He is not immediately visible but rises up out of the floor—a chilling, spectral figure—when a living creature enters the room.</p>
+                        <div class="stat-block">
+                            <h4>Mormesk, Wraith (CR 5)</h4>
+                            <p><strong>AC:</strong> 13, <strong>HP:</strong> 67</p>
+                            <p><strong>Speed:</strong> 0 ft., fly 60 ft. (hover)</p>
+                            <p><strong>Life Drain:</strong> Melee Spell Attack: +6 to hit, reach 5 ft., one creature. Hit: 21 (4d8+3) necrotic damage. The target must succeed on a DC 14 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>
+                            <p><strong>Create Specter:</strong> The wraith targets a humanoid within 10 feet of it that has been dead for no longer than 1 minute and died violently. The target's spirit rises as a specter in the space of its corpse or in the nearest unoccupied space. The specter is under the wraith's control. The wraith can have no more than seven specters under its control at one time.</p>
+                            <p><strong>Key Features:</strong> Incorporeal Movement, Sunlight Sensitivity. Damage Resistances: Acid, Cold, Fire, Lightning, Thunder; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks. Damage Immunities: Necrotic, Poison. Condition Immunities: Charmed, Exhaustion, Grappled, Paralyzed, Petrified, Poisoned, Prone, Restrained.</p>
+                        </div>
+                        <p class="mt-2"><strong>Roleplaying Mormesk:</strong> Mormesk speaks in grave whispers. When he first rises, he says, "Your presence is offensive to me, your life forfeit. My treasures are mine alone, not yours to plunder!" If the characters make no attempt to reason with him, he attacks. If they try to reason (provided they haven't harmed him or seized property), he listens. He is irrevocably evil, but values magic items (especially scrolls), spellbooks, and arcane knowledge. A character must succeed on a DC 12 Charisma (Persuasion) check to convince him of an offering's value. He won't relinquish the wooden pipe in the chest but might part with coins/gems if the PCs agree to kill the Spectator in Area 15. If satisfied, he allows them to peruse his books and find the map.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">SCORCHED IRON CHEST (TREASURE)</h4>
+                        <p>The chest is unlocked. It contains 1,100 cp, 160 sp, 50 ep, three diamonds (100 gp each), and a wooden pipe adorned with platinum filigree (150 gp).</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">BOOKSHELVES & TOMES</h4>
+                        <p>A handful of magically preserved tomes remain on the shelves. Most are histories or philosophical treatises. One, however, has a map sewn into its cover. The map's presence can be discerned with a successful DC 12 Intelligence (Investigation) check. This map can lead to a future adventure of your own creation.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area13">North door to area 13</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>Mormesk was a powerful mage until he met his end in the spell battle. Centuries of anger have transformed him into a hate-filled apparition. He leads many of the undead in Wave Echo Cave. This building served as a guesthouse for visiting wizards working in the Forge of Spells (area 15).</p>
+                </div>
+            `
+      },
+      {
+        id: "area15",
+        name: "Area 15: Forge of Spells",
+        content: `
+                 <div class="boxed-text">
+                    <p>This large workshop was clearly once a place of significant arcane power, though it was badly damaged by the ancient spell battle that laid waste to the mine. Worktables taking up two corners of the room are scorched, and the plaster has been burned off the masonry walls. In the middle of the room, a stone pedestal holds a small brazier in which an eerie green flame dances and crackles with unnatural life. The brazier and its pedestal appear to have been untouched by the forces that destroyed this area. Floating silently behind the brazier is a disturbing spherical creature, roughly four feet in diameter. Four eyestalks protrude from its central mass, two on each side. In the center of its body, a single large eye stares directly at you. A thick, burbling voice echoes inside your head: "Hello."</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 13:</strong> To notice that the green flame in the brazier casts no shadows and emits no heat, only an intense, verdant light. The floating creature remains perfectly still, its central eye unblinking.</li>
+                        <li><strong>INTELLIGENCE (ARCANA) - DC 14 (upon seeing the creature):</strong> To identify the floating entity as a Spectator, a lesser type of beholderkin often summoned as a magical guardian.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">FORCING THE DOORS</h4>
+                        <p>The northernmost door is scorched and cracked; forcing it open requires a successful DC 15 Strength (Athletics) check. The western double doors are just as damaged but stand slightly ajar.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURE: THE SPECTATOR</h4>
+                        <p>The monster that guards this room is a <strong>Spectator</strong> (CR 3, use 2014 MM stats, with HP adjusted to ~58 and Eye Ray Save DC to 14). One of the human wizards who worked in the Forge of Spells summoned it to guard the magic items created and stored here. The sacking of the mine unhinged its grip on reality; it believes the mine is still in use, ignoring all evidence to the contrary.</p>
+                        <div class="stat-block">
+                            <h4>Spectator (CR 3, Adjusted)</h4>
+                            <p><strong>AC:</strong> 14 (natural armor), <strong>HP:</strong> 58</p>
+                            <p><strong>Speed:</strong> 0 ft., fly 30 ft. (hover)</p>
+                            <p><strong>Eye Rays (Action, shoots two different rays, Save DC 14):</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>Confusion Ray (Wis save):</strong> Target can't take reactions, rolls d10 on its turn to determine behavior (attacks random creature, does nothing, etc.).</li>
+                                <li><strong>Paralyzing Ray (Con save):</strong> Paralyzed for 1 minute (save ends at end of each turn).</li>
+                                <li><strong>Fear Ray (Wis save):</strong> Frightened for 1 minute (save ends at end of each turn, disadv. if spectator visible).</li>
+                                <li><strong>Wounding Ray (Con save):</strong> Target takes 3d10 necrotic damage on failed save, half on success.</li>
+                            </ul>
+                            <p><strong>Spell Reflection (Reaction):</strong> If the spectator makes a successful saving throw against a spell, or a spell attack misses it, it can choose another creature (including the spellcaster) it can see within 30 feet of it. The spell targets the chosen creature instead of the spectator.</p>
+                        </div>
+                        <p class="mt-2"><strong>Roleplaying the Spectator:</strong> It greets intruders with a telepathic "Hello." If the party attempts to remove anything from this area, the Spectator attacks. If the Spectator is blinded somehow, it disappears back to its home plane, convinced it can no longer perform its task. A character can trick the Spectator into thinking they are authorized personnel sent to terminate its employment with a successful DC 15 Charisma (Deception) check. If successful, it departs.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">BRAZIER OF GREEN FLAME</h4>
+                        <p>A successful DC 14 Intelligence (Arcana) check identifies the brazier as the source of the magic that suffuses the surrounding caverns. This magic has waned and can no longer permanently enchant items. However, any nonmagical weapon or suit of armor bathed in the green flame for at least 1 minute becomes a +1 weapon or +1 armor, respectively, for $1text{d}12$ hours. The brazier cannot be removed from the Forge.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">NORTHERN ROOM</h4>
+                        <p>This small room is a separate workspace, where items being prepared for enchantment were polished and finished. Like the main workshop, it has been almost completely destroyed.</p>
+                    </div>
+                     <div class="element-block">
+                        <h4 class="element-heading">TREASURE</h4>
+                        <p>On the worktable in the southeast corner of the room are the last items the Spectator was charged to protect: <em>Lightbringer</em> and <em>Dragonguard</em>.</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>Lightbringer:</strong> This +1 mace was made for a cleric of Lathander. The head of the mace is shaped like a sunburst and made of solid brass. It glows as bright as a torch when its wielder commands. While glowing, the mace deals an extra $1text{d}6$ radiant damage to undead creatures.</li>
+                            <li><strong>Dragonguard:</strong> This +1 breastplate has a gold dragon motif worked into its design. Created for a human hero of Neverwinter, it grants its wearer advantage on saving throws against the breath weapons of creatures that have the dragon type.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area13">South door to area 13</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The Forge of Spells is where the wizards allied with the dwarves and gnomes of the Phandelver's Pact channeled the magic of these caverns. The wraith (area 14) wants to drive off or kill the Spectator but has so far failed. The Spectator sees nothing strange about undead roaming the mine, considering them just another type of worker or pest.</p>
+                </div>
+            `
+      },
+      {
+        id: "area16",
+        name: "Area 16: Booming Cavern",
+        content: `
+                <div class="boxed-text">
+                    <p>A narrow, damp ledge overlooks a large, dark cavern that houses a surging, seething body of water. The rhythmic booming sound heard intermittently throughout the mines is deafeningly loud here. At regular intervals, a fresh surge of water funnels violently into this chamber from an unseen opening to the northeast, slamming against the far wall just below the ledge with immense force. The echo suggests this cave might be one arm of a much larger, water-filled cavern system.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 10:</strong> To feel the vibration of the rock through your feet just before each surge and to notice the high-water mark on the cavern walls, some 10 feet above the current receding water level.</li>
+                        <li><strong>WISDOM (SURVIVAL) - DC 13:</strong> To determine the surges occur roughly every two minutes. The force of the water is clearly dangerous.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">LEDGE AND SURGING WATER</h4>
+                        <p>The ledge hugging the south wall is 15 feet above the water's normal level. However, when water surges into the cave (every 2 minutes, or 20 rounds of combat), it raises the water level by 10 feet for about a minute before receding. During a surge, the water becomes extremely turbulent.</p>
+                        <p class="mt-1"><strong>Hazard:</strong> Any creature on the ledge within 5 feet of the edge when a surge hits must succeed on a <strong>DC 12 Strength saving throw</strong> or be knocked off the ledge into the surging water. Creatures in the water during a surge are battered and tossed around, taking $2text{d}6$ bludgeoning damage at the start of their turn and being moved $2text{d}10$ feet in a random direction. The normal depth of the water is 20 feet; during a surge, it becomes 30 feet near the ledge.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area17">South tunnel to area 17</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The booming sound is what gives Wave Echo Cave its name. The source of the surges is a connection to an underground river or perhaps a magically influenced tidal system deep within the mountains. Nezznar has not explored this area thoroughly due to the danger and lack of obvious connection to the Forge of Spells.</p>
+                </div>
+            `
+      },
+      {
+        id: "area17",
+        name: "Area 17: Old Streambed",
+        content: `
+                <div class="boxed-text">
+                    <p>This passageway is barely four feet high, forcing Medium-sized creatures to stoop or crawl. It is obstructed by rounded boulders and smooth pebbles, clearly indicating it was once a streambed, though no water flows here now. The air is damp and cool, and the passage curves gently out of sight.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 11:</strong> To notice that the pebbles are worn very smooth, and the sides of the passage show water erosion marks up to about two feet high.</li>
+                        <li><strong>INTELLIGENCE (NATURE) OR WISDOM (SURVIVAL) - DC 12:</strong> To deduce that the stream which carved this path must have been diverted some time ago.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">NARROW PASSAGE</h4>
+                        <p>The passage remains consistently low (about 4 feet high). Medium creatures moving through here must squeeze, halving their speed and having disadvantage on attack rolls and Dexterity saving throws. Attack rolls against them have advantage. The passage offers a way to circumvent the undead in area 12 (Smelter Cavern).</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area12">South tunnel to area 12</a></li>
+                        <li><a href="#" class="area-link" data-area="area16">North tunnel to area 16</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>The stream flowing from area 10 (Dark Pool) to area 18 (Collapsed Cavern) used to continue through this low passage, eventually emptying out into area 16 (Booming Cavern). The dwarves diverted the stream into the channel leading to area 12 to drive the waterwheel in the smelter. Then the earthquakes that rocked Wave Echo Cave during the final spell battle of the orc invasion collapsed the floor in area 18, diverting the stream once again. The old streambed remains as a usable, albeit cramped, passage. Nezznar has not yet discovered this route.</p>
+                </div>
+            `
+      },
+      {
+        id: "area18",
+        name: "Area 18: Collapsed Cavern",
+        content: `
+                <div class="boxed-text">
+                    <p>A wide, rubble-filled rift dominates the eastern half of this large cavern. A stream of water pours out of the west wall, tumbles down into the rift with a series of small cascades, and then flows out of sight to the north within the chasm. Several sturdy hemp ropes are secured to iron stakes hammered into the stone along the western edge of the rift, leading down to the chasm floor some twenty feet below. The air is damp, and the sound of the falling water echoes through the space. You see figures moving about: two hulking, hairy humanoids are clearing rock on the rift floor, while another stands guard near the western edge. A slender figure in dark robes, appearing to be a drow, supervises the operation from a slightly elevated position near the stream's entry point.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 13:</strong> To notice that the "drow" supervisor carries no obvious weapon but observes the work with keen, intelligent eyes, occasionally gesturing with subtle hand movements. The bugbears seem to respond to these gestures. The bugbear guard is alert and actively scanning the cavern entrances.</li>
+                        <li><strong>INTELLIGENCE (NATURE) - DC 12 (if observing the bugbears):</strong> To recognize the large humanoids as Bugbears, known for their stealth and brutish strength, often serving as shock troops or guards for more cunning leaders.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">CREATURES: NEZZNAR'S SERVANTS</h4>
+                        <p>Three <strong>Bugbear Warriors</strong> (2024 MM) and a <strong>Doppelganger</strong> (2024 MM) named Vhalak (in the guise of a male drow) are present. Two Bugbear Warriors are on the rift floor clearing rubble. One Bugbear Warrior stands guard in the western half of the cavern. Vhalak supervises from near the stream.</p>
+                        <div class="stat-block">
+                            <h4>Bugbear Warrior (CR 1) - 3 present</h4>
+                            <p><strong>AC:</strong> 14 (hide armor), <strong>HP:</strong> 33</p>
+                            <p><strong>Attack (Morningstar):</strong> +4 to hit, 2d8+2 piercing. <strong>Grab:</strong> +4 to hit, 2d6+2 bludgeoning, target grappled (DC 12).</p>
+                            <p><strong>Abduct:</strong> Bonus action, move speed with grappled Medium/Small creature.</p>
+                            <p><strong>Key Features:</strong> Stealth +6, Surprise Attack (extra 2d6 on first surprise hit).</p>
+                        </div>
+                        <div class="stat-block mt-2">
+                            <h4>Vhalak, Doppelganger (CR 3)</h4>
+                            <p><strong>AC:</strong> 14, <strong>HP:</strong> 52</p>
+                            <p><strong>Multiattack:</strong> Two Slam attacks and Unsettling Visage (if available).</p>
+                            <p><strong>Slam:</strong> +6 to hit (Adv. on first round), 2d6+4 bludgeoning.</p>
+                            <p><strong>Unsettling Visage (Recharge 6):</strong> DC 12 Wis save or Frightened 1 min (save ends). 15-ft emanation.</p>
+                            <p><strong>Read Thoughts:</strong> Casts <em>Detect Thoughts</em> (DC 12 Cha save).</p>
+                            <p><strong>Key Features:</strong> Shape-Shift (Medium/Small Humanoid), Immunity to Charmed.</p>
+                        </div>
+                        <p class="mt-2"><strong>Tactics:</strong> If a fight breaks out, the two Bugbear Warriors in the rift climb up the ropes (1 round action) to join. The guard Bugbear engages immediately. Vhalak uses Read Thoughts to assess threats and Unsettling Visage if pressed, relying on the Bugbears for protection. If two or more Bugbears are killed, Vhalak attempts to retreat to Area 19 to warn Nezznar, potentially using Shape-Shift to aid escape.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">RIFT</h4>
+                        <p>The rift is 20 feet deep. The ropes allow ascent/descent without a check. Climbing the rough walls without a rope requires a DC 13 Strength (Athletics) check. Failure by 5+ means a fall (2d6 bludgeoning, prone).</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">TREASURE: GAUNTLETS OF OGRE POWER</h4>
+                        <p>Nezznar's divinations are accurate. Buried under heavy rubble at the bottom of the rift is the crushed skeleton of a dwarf wearing <em>gauntlets of ogre power</em>. The remains are hidden from view but can be found with a successful DC 20 Wisdom (Perception) check while searching the rift floor. Each character searching can attempt one check per hour (or once per 10 minutes of dedicated searching, DM's discretion).</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Exits</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1">
+                        <li><a href="#" class="area-link" data-area="area12">West channel to area 12</a></li>
+                        <li><a href="#" class="area-link" data-area="area17">South channel to area 17</a></li>
+                    </ul>
+                </div>
+
+                <div class="gm-notes">
+                    <p>Nezznar's servants occupy this cavern, guarding against undead incursions from other parts of the mine and carefully sifting through the rubble based on the Black Spider's divinations about hidden treasure. Vhalak is one of Nezznar's more trusted lieutenants, primarily for its espionage capabilities.</p>
+                </div>
+            `
+      },
+      {
+        id: "area19",
+        name: "Area 19: The Ritual Chamber (Nezznar's Sanctum)",
+        content: `
+                <div class="boxed-text">
+                    <p>This vast, dark natural cavern echoes with a faint, rhythmic booming sound. The 30-foot-high ceilings drip with stalactites, many thick as tree trunks. The floor is smooth, natural stone, slick with moisture in places. The centerpiece of the cavern is a wide stone brazier filled with roiling, pulsating magical green flames—the Forge of Spells. This eerie light casts dancing green shadows across the chamber. Numerous large stalagmites offer substantial cover. Parts of the cavern are festooned with thick, sticky webs, obscuring vision and making movement difficult. Four ominous, dark obsidian crystals, veined with sickly green light, are placed strategically around the Forge brazier, roughly 15-20 feet from it; two of them are already glowing brightly with an unnatural luminescence.</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Initial Observations</h3>
+                    <ul class="list-disc list-inside text-secondary-text space-y-1 reactive-checks">
+                        <li><strong>WISDOM (PERCEPTION) - DC 14:</strong> To spot a slender, dark-robed figure (Nezzar) perched atop a high stalagmite or clinging to the cavern wall near one of the inactive crystals, seemingly absorbed in a ritual. The glint of multiple eyes might also be seen from shadowy crevices or within the webs.</li>
+                        <li><strong>INTELLIGENCE (ARCANA) - DC 15:</strong> To recognize the setup around the Forge of Spells—the brazier and the focusing crystals—as components of a powerful ritual, likely intended to draw upon or manipulate the Forge's magical energies. The active crystals hum with palpable power.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Room Elements & Hazards</h3>
+                    <div class="element-block">
+                        <h4 class="element-heading">ENVIRONMENTAL FACTORS</h4>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>Booming Waves:</strong> Every 2 minutes (10 rounds), or for dramatic effect. Loud crashing wave sound. Disadvantage on Wisdom (Perception) checks relying on hearing for 1 round. Creatures in precarious positions (climbing, near ledges) must make a DC 12 Dexterity saving throw or fall prone.</li>
+                            <li><strong>Forge Brazier (Green Flames):</strong> Nonmagical weapon/armor immersed for 1 minute becomes +1 for 1d12 hours. Touching/splashing causes 2d6 fire or radiant damage.</li>
+                            <li><strong>Unstable Magic:</strong> End of each round, roll d6. On a 1: Pulse of raw energy from a random active Focusing Crystal (or Forge if none active). Creatures within 10 ft of source make DC 13 Dex save, taking 2d6 force damage (half on success). Anyone concentrating damaged by this makes an additional DC 10 Con save. If pulse from crystal, it deactivates.</li>
+                            <li><strong>Webs:</strong> Difficult terrain. Heavily webbed areas lightly obscured. AC 10, HP 10 (thicker sections), fire vulnerability.</li>
+                        </ul>
+                    </div>
+
+                    <div class="element-block">
+                         <h4 class="element-heading">THE UNSTABLE FORGE ATTUNEMENT (MECHANIC)</h4>
+                         <p>Players must deactivate crystals to weaken Nezzar's Phase 2. Two are active at start.</p>
+                         <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                             <li><strong>Crystal Properties:</strong> AC 13, HP 25. Immunity: poison, psychic. Resistance: nonmagical bludgeoning, piercing, slashing.</li>
+                             <li><strong>Deactivating an Active Crystal:</strong>
+                                 <ul class="list-disc list-inside ml-4">
+                                     <li><strong>Attack:</strong> Destroy it (deals 25 damage).</li>
+                                     <li><strong>Disrupt (Arcana):</strong> Action, adjacent, DC 15 Intelligence (Arcana) check.</li>
+                                     <li><strong>Sabotage Mount (Thieves' Tools):</strong> Action, adjacent, DC 15 Dexterity (Thieves' Tools) check.</li>
+                                     <li><strong>Dispel Magic:</strong> DC 14/15 spellcasting ability check (depends on Nezzar's CR).</li>
+                                     <li><strong>Unstable Magic Pulse:</strong> If a pulse originates from a crystal, it deactivates.</li>
+                                 </ul>
+                             </li>
+                             <li>Nezzar can use her Action to reactivate a disrupted/sabotaged/pulsed crystal.</li>
+                         </ul>
+                    </div>
+
+                    <div class="element-block">
+                        <h4 class="element-heading">PHASE 1: NEZZAR'S CUNNING</h4>
+                        <p><strong>Goal:</strong> Nezzar attempts to activate the remaining two Focusing Crystals while her minions engage the party.</p>
+                        <div class="stat-block">
+                            <h4>Nezzar, The Black Spider (Phase 1, CR 5)</h4>
+                            <p><strong>AC:</strong> 12 (15 with Mage Armor), <strong>HP:</strong> 90 (12d8 + 36)</p>
+                            <p><strong>Saves:</strong> Con +6, Int +6, Wis +4; <strong>Skills:</strong> Arcana +6, Deception +4, Perception +4, Stealth +5</p>
+                            <p><strong>Spider Staff:</strong> 10 charges (Spider Climb, Web DC 15).</p>
+                            <p><strong>Spellcasting (DC 14, +6 to hit):</strong> At Will: Dancing Lights, Mage Armor, Ray of Frost (3d6 cold, speed -10ft). 3/Day: Magic Missile, Shield. 2/Day: Web. 1/Day: Darkness, Faerie Fire, Invisibility, Levitate, Suggestion.</p>
+                            <p><strong>Action:</strong> Activate Crystal (Concentration).</p>
+                        </div>
+                        <p class="mt-2"><strong>Minions (Phase 1):</strong></p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1">
+                            <li>1x <strong>Phase Spider</strong> (CR 3, HP 45, AC 14, Bite +5, 1d10+3 P + 2d8 Poison DC 12 Con, Ethereal Jaunt BA)</li>
+                            <li>2x <strong>Giant Spiders</strong> (CR 1, HP 26, AC 14, Bite +5, 1d8+3 P + 2d6 Poison DC 11 Con, Web attack)</li>
+                            <li>1x <strong>Swarm of Spiders</strong> (CR 1/2, HP 22, AC 12, Bites +3, 2d4 P)</li>
+                        </ul>
+                        <p class="mt-2"><strong>Tactics (Phase 1):</strong> Nezzar prioritizes activating crystals, using spells and minions for defense and control. Phase Spider targets casters/rogues. Giant Spiders engage melee. Swarm disrupts casters.</p>
+                    </div>
+
+                    <div class="element-block">
+                        <h4 class="element-heading">TRIGGERING PHASE 2: THE SPIDER'S TRUE FORM</h4>
+                        <p>When Nezzar (Phase 1) drops to 0 HP: Her body convulses. The Spider Staff flares, drawing power from the Forge and active Crystals. Her form twists into a Large monstrous spider hybrid. Remaining minions become frenzied (Adv. on next attack or temp HP).</p>
+                    </div>
+
+                    <div class="element-block">
+                        <h4 class="element-heading">PHASE 2: THE UNLEASHED FURY</h4>
+                        <div class="stat-block">
+                            <h4>Nezzar Transformed (Base CR 7, up to CR 11)</h4>
+                            <p><strong>AC:</strong> 18 (Natural), <strong>HP:</strong> 152 (Base, +Temp HP from crystals)</p>
+                            <p><strong>Speed:</strong> 30 ft., Climb 30 ft.</p>
+                            <p><strong>Saves:</strong> Dex +7, Con +7, Wis +5</p>
+                            <p><strong>Actions:</strong> Multiattack (1 Bite, 2 Claws).</p>
+                            <p><strong>Bite:</strong> +7 to hit, 1d10+4 piercing + 3d8 poison (base, increases with crystals).</p>
+                            <p><strong>Claws:</strong> +7 to hit, 2d6+4 slashing.</p>
+                            <p><strong>Web Spit (Recharge 5-6):</strong> +7 to hit, range 30/60 ft., target Restrained (DC 14 Str escape).</p>
+                            <p><strong>Innate Spellcasting (DC 14):</strong> At Will: Dancing Lights. 1/Day: Darkness, Faerie Fire.</p>
+                        </div>
+                        <p class="mt-2"><strong>Forge Attunement Crystal Effects (Phase 2 Modifiers):</strong></p>
+                        <table class="w-full text-sm text-left text-gray-500 mt-2">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr><th scope="col" class="px-2 py-1">Active Crystals</th><th scope="col" class="px-2 py-1">Temp HP</th><th scope="col" class="px-2 py-1">Poison Dmg (Total)</th><th scope="col" class="px-2 py-1">New Abilities</th><th scope="col" class="px-2 py-1">Est. CR</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b"><td class="px-2 py-1">0</td><td class="px-2 py-1">+0</td><td class="px-2 py-1">3d8</td><td class="px-2 py-1">Base</td><td class="px-2 py-1">7</td></tr>
+                                <tr class="bg-gray-50 border-b"><td class="px-2 py-1">1</td><td class="px-2 py-1">+30</td><td class="px-2 py-1">3d8</td><td class="px-2 py-1">—</td><td class="px-2 py-1">8</td></tr>
+                                <tr class="bg-white border-b"><td class="px-2 py-1">2</td><td class="px-2 py-1">+60</td><td class="px-2 py-1">4d8</td><td class="px-2 py-1">—</td><td class="px-2 py-1">9</td></tr>
+                                <tr class="bg-gray-50 border-b"><td class="px-2 py-1">3</td><td class="px-2 py-1">+90</td><td class="px-2 py-1">5d8</td><td class="px-2 py-1">Reaction: Web Snare (DC 14)</td><td class="px-2 py-1">10</td></tr>
+                                <tr class="bg-white"><td class="px-2 py-1">4</td><td class="px-2 py-1">+120</td><td class="px-2 py-1">6d8</td><td class="px-2 py-1">Reaction: Web Snare, Legendary Resistance (1/Day)</td><td class="px-2 py-1">11</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-2"><strong>Tactics (Phase 2):</strong> Aggressive, uses mobility, Multiattack standard. Darkness if heavily damaged, Faerie Fire on elusive targets. Uses gained reactions.</p>
+                    </div>
+                </div>
+
+                <div class="gm-notes">
+                    <p>This is the climax of the adventure. Nezznar is attempting to fully attune to the Forge of Spells, which she believes will grant her immense power. The crystals amplify and channel this energy. The transformation is her desperate gambit if her initial plans are thwarted. Emphasize the dynamic environment and the stakes. Adapt difficulty based on party performance and remaining resources.</p>
+                </div>
+            `
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const navigation = document.getElementById('navigation');
+      const areaContentDisplay = document.getElementById('area-content-display');
+      const welcomeMessage = document.getElementById('welcome-message');
+      let currentSection = null;
+
+      function displayArea(areaId) {
+        const area = areas.find(a => a.id === areaId);
+        if (area) {
+          if (currentSection) {
+            currentSection.classList.remove('active');
+          }
+          areaContentDisplay.innerHTML = `
+            <h2 class="text-3xl font-bold text-primary-text mb-4 border-b-2 border-accent pb-2">${area.name}</h2>
+            <img src="images/${area.id.replace('area', '')}.png" alt="${area.name}" class="area-image">
+            ${area.content}`;
+          areaContentDisplay.classList.add('active');
+          welcomeMessage.style.display = 'none';
+          currentSection = areaContentDisplay;
+
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.area === areaId) {
+              link.classList.add('active');
+            }
+          });
+          // Scroll main content to top
+          document.getElementById('main-content').scrollTop = 0;
+
+          // Reattach event listeners for area links
+          document.querySelectorAll('.area-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              displayArea(link.dataset.area);
+            });
+          });
+        }
+      }
+
+      areas.forEach(area => {
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = area.name;
+        link.classList.add('block', 'p-2', 'rounded-md', 'hover:bg-secondary-bg', 'nav-link', 'text-primary-text', 'hover:text-accent', 'transition-colors', 'duration-150');
+        link.dataset.area = area.id;
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          displayArea(area.id);
+        });
+        listItem.appendChild(link);
+        navigation.appendChild(listItem);
+      });
+
+      // Attach event listeners for area links in content
+      document.querySelectorAll('.area-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          displayArea(link.dataset.area);
+        });
+      });
+
+      // Dark mode toggle functionality
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+      });
+    });
+
+    // --- Dungeon Turn Tracker State ---
+    let dungeonState = {
+      turn: 1,
+      effects: [],
+      marchingOrder: Array(9).fill(null), // 3x3 grid (front row is 0-2, rear is 6-8)
+      characters: [],
+      currentArea: null
+    };
+
+    // --- Utility Functions ---
+    function saveDungeonState() {
+      localStorage.setItem('dungeonState', JSON.stringify(dungeonState));
+    }
+    function loadDungeonState() {
+      const data = localStorage.getItem('dungeonState');
+      if (data) {
+        dungeonState = JSON.parse(data);
+        renderDungeonUI();
+        // Restore area if possible
+        if (dungeonState.currentArea) displayArea(dungeonState.currentArea);
+      }
+    }
+
+    // --- Turn Controls ---
+    const turnNumber = document.getElementById('turn-number');
+    document.getElementById('advance-turn').onclick = () => {
+      dungeonState.turn++;
+      // Tick all effects
+      dungeonState.effects.forEach(e => { if (e.ticks < e.duration) e.ticks++; });
+      renderDungeonUI();
+      saveDungeonState();
+    };
+    document.getElementById('reset-turns').onclick = () => {
+      dungeonState.turn = 1;
+      dungeonState.effects.forEach(e => e.ticks = 0);
+      renderDungeonUI();
+      saveDungeonState();
+    };
+
+    // --- Encounter Check ---
+    document.getElementById('encounter-check').onclick = () => {
+      const roll = Math.ceil(Math.random() * 8);
+      document.getElementById('encounter-result').textContent = `Rolled: ${roll}${roll === 1 ? ' (Encounter!)' : ''}`;
+    };
+
+    // --- Effect Tracker ---
+    function renderEffects() {
+      const el = document.getElementById('effect-list');
+      el.innerHTML = '';
+      dungeonState.effects.forEach((effect, idx) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-1 mb-1';
+        row.innerHTML = `
+          <span class="font-semibold">${effect.name}</span>
+          <span class="text-xs">[${effect.duration * 10} min]</span>
+          <span>
+            ${Array.from({length: effect.duration}).map((_,i) =>
+              `<input type="checkbox" ${i < effect.ticks ? 'checked' : ''} data-idx="${idx}" data-tick="${i}" style="accent-color:#A88B67;">`
+            ).join('')}
+          </span>
+          <button data-remove="${idx}" class="ml-1 text-xs text-red-600 hover:underline">✕</button>
+        `;
+        el.appendChild(row);
+      });
+      // Tick handlers
+      el.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.onchange = () => {
+          const idx = +cb.dataset.idx, tick = +cb.dataset.tick;
+          dungeonState.effects[idx].ticks = tick + 1;
+          renderEffects();
+          saveDungeonState();
+        };
+      });
+      // Remove handlers
+      el.querySelectorAll('button[data-remove]').forEach(btn => {
+        btn.onclick = () => {
+          dungeonState.effects.splice(+btn.dataset.remove, 1);
+          renderEffects();
+          saveDungeonState();
+        };
+      });
+    }
+    document.getElementById('add-effect-form').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('effect-name').value.trim();
+      const duration = parseInt(document.getElementById('effect-duration').value, 10);
+      if (name && duration > 0) {
+        dungeonState.effects.push({name, duration, ticks: 0});
+        renderEffects();
+        saveDungeonState();
+        this.reset();
+      }
+    };
+
+    // --- Marching Order ---
+    function renderMarchingOrder() {
+      const grid = document.getElementById('marching-order-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 27; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'border rounded h-8 w-16 flex items-center justify-center text-xs cursor-pointer bg-white';
+        cell.style.minWidth = '48px';
+        cell.style.minHeight = '32px';
+        cell.dataset.idx = i;
+        const charIdx = dungeonState.marchingOrder[i];
+        cell.textContent = charIdx !== null && dungeonState.characters[charIdx] ? dungeonState.characters[charIdx] : '';
+        cell.onclick = () => {
+          // Assign character to this cell
+          const charName = prompt('Assign character (type name or leave blank to clear):', cell.textContent);
+          if (charName === null) return;
+          if (charName === '') {
+            dungeonState.marchingOrder[i] = null;
+          } else {
+            let idx = dungeonState.characters.indexOf(charName);
+            if (idx === -1) {
+              dungeonState.characters.push(charName);
+              idx = dungeonState.characters.length - 1;
+            }
+            dungeonState.marchingOrder[i] = idx;
+          }
+          renderMarchingOrder();
+          renderCharacterList();
+          saveDungeonState();
+        };
+        grid.appendChild(cell);
+      }
+    }
+    function renderCharacterList() {
+      const el = document.getElementById('character-list');
+      el.innerHTML = dungeonState.characters.map((c, i) =>
+        `<span class="inline-block px-2 py-1 bg-gray-200 rounded mr-1 mb-1">${c} <a href="#" data-remove="${i}" class="text-red-600 ml-1">✕</a></span>`
+      ).join('');
+      el.querySelectorAll('a[data-remove]').forEach(a => {
+        a.onclick = (e) => {
+          e.preventDefault();
+          const idx = +a.dataset.remove;
+          dungeonState.characters.splice(idx, 1);
+          dungeonState.marchingOrder = dungeonState.marchingOrder.map(ci => ci === idx ? null : (ci > idx ? ci - 1 : ci));
+          renderCharacterList();
+          renderMarchingOrder();
+          saveDungeonState();
+        };
+      });
+    }
+    document.getElementById('add-character-form').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('character-name').value.trim();
+      if (name && !dungeonState.characters.includes(name)) {
+        dungeonState.characters.push(name);
+        renderCharacterList();
+        saveDungeonState();
+        this.reset();
+      }
+    };
+
+    // --- Save/Load State ---
+    document.getElementById('save-state').onclick = saveDungeonState;
+    document.getElementById('load-state').onclick = loadDungeonState;
+
+    // --- Render All Dungeon UI ---
+    function renderDungeonUI() {
+      turnNumber.textContent = dungeonState.turn;
+      renderEffects();
+      renderMarchingOrder();
+      renderCharacterList();
+    }
+
+    // --- Area Persistence ---
+    // Save area on navigation
+    const origDisplayArea = displayArea;
+    window.displayArea = function(areaId) {
+      dungeonState.currentArea = areaId;
+      saveDungeonState();
+      origDisplayArea(areaId);
+    };
+
+    // --- Initial Render ---
+    renderDungeonUI();
+    loadDungeonState();
+
+  </script>
+
+
+</body>
+
+</html>
