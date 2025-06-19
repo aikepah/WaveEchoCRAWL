@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player View - Wave Echo Cave</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-primary-bg text-primary-text dark-mode">
+    <div id="player-view-container" class="p-4 flex gap-4">
+        <div class="flex-grow">
+            <h1 class="text-2xl font-bold text-accent mb-6 text-center">Wave Echo Cave - Player View</h1>
+            <div id="image-container" class="relative">
+                <!-- Image will be rendered here -->
+            </div>
+            <div id="image-nav" class="flex justify-center items-center mt-4">
+                <!-- Navigation buttons will be rendered here -->
+            </div>
+        </div>
+        <div class="w-1/4">
+            <div id="player-effects-tracker" class="p-2 rounded bg-secondary-bg border border-accent text-sm mb-4">
+                <h2 class="text-xl font-bold mb-2">Active Effects</h2>
+                <div id="player-effect-list"></div>
+            </div>
+            <div id="player-marching-order" class="p-2 rounded bg-secondary-bg border border-accent text-sm">
+                <h2 class="text-xl font-bold mb-2">Marching Order</h2>
+                <div id="player-marching-order-grid" class="grid grid-cols-3 gap-1">
+                    <!-- Marching order will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/player.js"></script>
+</body>
+</html>
