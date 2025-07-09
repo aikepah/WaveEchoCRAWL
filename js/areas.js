@@ -232,8 +232,9 @@ const areas = [
                         <p>The gnomes and orcs appear to have died fighting each other. The gnomish corpse clutching the pouch (if spotted) has nothing of value in it; the pouch itself crumbles to dust if handled roughly.</p>
                     </div>
                     <div class="element-block">
-                        <h4 class="element-heading">IRON STRONGBOX (TREASURE)</h4>
-                        <p>Behind the counter, set into its base or hidden beneath a loose flagstone (if the Investigation check above was successful, or if the party searches thoroughly), is a locked iron strongbox. Opening it requires thieves' tools and a successful DC 18 Dexterity check. This pay chest was overlooked in the fighting and contains 600 cp, 180 sp, 90 ep, and 60 gp.</p>
+                        <h4 class="element-heading">IRON STRONGBOX (TREASURE & TRAP)</h4>
+                        <p>Behind the counter, set into its base or hidden beneath a loose flagstone (if the Investigation check above was successful, or if the party searches thoroughly), is a locked iron strongbox. Opening it requires thieves' tools and a successful DC 18 Dexterity check. This pay chest was overlooked in the fighting and contains 600 cp, 180 sp, 90 ep, and 60 gp. Additionally, tucked beneath the coins is a small, velvet-lined compartment containing a <em>Spell Scroll of Dispel Magic</em> (3rd level) and a <em>Spell Scroll of Lesser Restoration</em>.</p>
+                        <p class="mt-2"><strong>TRAP - Poison Needle:</strong> The lock is trapped with a poison needle. A successful <strong>DC 15 Wisdom (Perception)</strong> check made while inspecting the lock reveals the tiny hole for the needle. The trap can be disabled with a successful <strong>DC 15 Dexterity check using thieves' tools</strong>. Failing the lockpicking check by 5 or more, or attempting to force the box open without disarming the trap, triggers it. The character must make a <strong>DC 14 Dexterity saving throw</strong> to pull their hand away. On a failure, they take 1 piercing damage and must make a <strong>DC 14 Constitution saving throw</strong>, taking 22 (4d10) poison damage on a failed save, or half as much on a successful one.</p>
                     </div>
                 </div>
 
@@ -245,7 +246,7 @@ const areas = [
                 </div>
 
                 <div class="gm-notes">
-                    <p>The mine's assayers worked here, weighing and assessing ore samples and paying the miners for their labor. The office was a scene of desperate fighting during the orc invasion.</p>
+                    <p>The mine's assayers worked here, weighing and assessing ore samples and paying the miners for their labor. The office was a scene of desperate fighting during the orc invasion. The added scrolls make the treasure more appealing to level 5 characters, and the trap provides a classic challenge for a rogue.</p>
                 </div>
             `
   },
@@ -325,6 +326,16 @@ const areas = [
                     <div class="element-block">
                         <h4 class="element-heading">COLLAPSED EASTERN WALL</h4>
                         <p>The rubble is unstable. Trying to climb over it or clear it would be noisy and time-consuming, potentially attracting unwanted attention from other areas. There's no obvious passage through the collapse.</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">TRAP: DECEPTIVE PITFALL</h4>
+                        <p>The miners dug a pair of traps here to guard against vermin from the deeper caves. The first is obvious bait, the second is the real threat.</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>The Bait:</strong> A 10-foot-wide, 10-foot-deep pit is crudely covered with rotten planks and debris. A successful <strong>DC 10 Wisdom (Perception)</strong> check spots the obvious weak covering. Anyone stepping on it falls for 3 (1d6) bludgeoning damage.</li>
+                            <li><strong>The Real Trap:</strong> 10 feet *after* the first pit, a 10-foot section of the floor is a well-camouflaged trapdoor, indistinguishable from the surrounding floor. A successful <strong>DC 16 Wisdom (Perception)</strong> check is required to notice the faint seams. The trap opens into a 20-foot-deep pit lined with rusty metal spikes.</li>
+                            <li><strong>Disarm:</strong> The mechanism can be jammed with iron spikes on one side (no check needed), or disabled with a successful <strong>DC 15 Dexterity check using thieves' tools</strong>.</li>
+                            <li><strong>Effect:</strong> A creature falling into the second pit takes 7 (2d6) bludgeoning damage from the fall, and is then attacked by 1d4 spikes. Each spike makes a melee attack with a <strong>+7 bonus to hit</strong>, dealing 5 (1d6+2) piercing damage on a hit.</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -547,7 +558,16 @@ const areas = [
                         <h4 class="element-heading">BARRICADED DOOR (EASTERN)</h4>
                         <p>The eastern door is barricaded from inside the room and requires a successful DC 20 Strength (Athletics) check to force open. If the characters try to force it, the Bugbears will be alerted and prepare an ambush.</p>
                     </div>
-                     <div class="element-block">
+                    <div class="element-block">
+                        <h4 class="element-heading">TRAP: ALARM TRIPWIRE</h4>
+                        <p>A thin, grimy tripwire is stretched 3 inches off the ground across the western entrance to the barracks. It's connected to a dangling string of broken metal bits and empty bottles, hidden behind the door.</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>Detection:</strong> A successful <strong>DC 13 Wisdom (Perception)</strong> check spots the wire.</li>
+                            <li><strong>Disarm:</strong> A successful <strong>DC 10 Dexterity check using thieves' tools</strong> snips the wire silently. A character can also step over it if they spot it.</li>
+                            <li><strong>Effect:</strong> If triggered, the junk pile clatters loudly. The bugbears inside are alerted and cannot be surprised. They will take defensive positions behind the bunks and prepare to attack as soon as the door opens.</li>
+                        </ul>
+                    </div>
+                    <div class="element-block">
                         <h4 class="element-heading">TREASURE</h4>
                         <p>The Bugbear Tyrant carries a pouch containing 15 cp, 13 ep, and a <em>potion of vitality</em>.</p>
                     </div>
@@ -655,6 +675,17 @@ const areas = [
                     <div class="element-block">
                         <h4 class="element-heading">STONE BUILDINGS</h4>
                         <p>These structures are clearly of a different architectural style than the rest of the mine, suggesting they were additions made by non-dwarven allies. The southern building is Area 14 (Wizards' Quarters), and the northern building is Area 15 (Forge of Spells).</p>
+                    </div>
+                    <div class="element-block">
+                        <h4 class="element-heading">TRAP: STAR-STEPPING PUZZLE</h4>
+                        <p>The floor of this cavern is a magical trap left by its original wizard inhabitants. A faint inscription in Elvish near the main entrance reads, "Follow the path of the wise old owl to walk without fear."</p>
+                        <ul class="list-disc list-inside text-secondary-text space-y-1 mt-2">
+                            <li><strong>The Puzzle:</strong> Among the many "constellations" on the ceiling, a successful <strong>DC 14 Intelligence (Investigation)</strong> check allows a character to identify one that clearly resembles an owl. The floor tiles directly beneath this constellation are safe to walk on, creating a winding path through the cavern.</li>
+                            <li><strong>Detection:</strong> A successful <strong>DC 14 Intelligence (Arcana)</strong> check reveals that the entire floor radiates faint abjuration magic, except for a specific, winding path.</li>
+                            <li><strong>Trigger:</strong> Stepping on any floor tile that is *not* directly under the path of the owl constellation.</li>
+                            <li><strong>Effect:</strong> The triggering creature must make a <strong>DC 14 Wisdom saving throw</strong>. On a failed save, the creature is affected by a magical confusion effect for 1 minute. At the start of each of its turns, the creature rolls a d6: on a 1-2, it uses all its movement to move in a random direction; on a 3-4, it does nothing but babble incoherently; on a 5-6, it acts normally. The creature can repeat the saving throw at the end of each of its turns, ending the effect on a success.</li>
+                            <li><strong>Disarm:</strong> The trap cannot be disarmed conventionally. A successful casting of <em>dispel magic</em> (DC 15) on a 5-foot square of trapped floor suppresses the effect on that square for 1 minute.</li>
+                        </ul>
                     </div>
                 </div>
 
