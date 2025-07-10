@@ -1,6 +1,6 @@
 # Wave Echo Cave - DM's Interactive Guide
 
-After playing around with updating my keyed encounters for Wave Echo Cave using Gemini (Scaling for a party of 4 level 5 characters, using the "How to Run a Room" principles from Keith Amman, adding traps, and using some monsters from Flee Mortals and Monster Manual Expanded) it asked me if I wanted to use their Canvas tool to create an app. Curious, I said yes, and this is the result! It generated an HTML structure with CSS and basic JS navigation for each area. Later I pulled it into VS Code and utilized Copilot to enhance the functionality, adding a DM interface and a player view that updates in real-time using `localStorage`, effect tracking, and more. This was a fun quick experiment that turned into a useful tool for running the Wave Echo Cave adventure in Dungeons & Dragons. Definitely not how I would have implemented it from scratch, but considering I only spent a few hours (including pulling in all the area descriptions and images) it turned out pretty well! There's plenty of room for improvement, but for running a couple sessions in this dungeon, it worked great!
+After playing around with updating my keyed encounters for Wave Echo Cave using Gemini (Scaling for a party of 4 level 5 characters, using the "How to Run a Room" principles from Justin Alexander, adding traps, and using some monsters from Flee Mortals and Monster Manual Expanded) it asked me if I wanted to use their Canvas tool to create an app. Curious, I said yes, and this is the result! It generated an HTML structure with CSS and basic JS navigation for each area. Later I pulled it into VS Code and utilized Copilot to enhance the functionality, adding a DM interface and a player view that updates in real-time using `localStorage`, effect tracking, and more. This was a fun quick experiment that turned into a useful tool for running the Wave Echo Cave adventure in Dungeons & Dragons. Definitely not how I would have implemented it from scratch, but considering I only spent a few hours (including pulling in all the area descriptions and images) it turned out pretty well! There's plenty of room for improvement, but for running a couple sessions in this dungeon, it worked great!
 
 This project is a digital Dungeon Master (DM) tool for running the Wave Echo Cave adventure in Dungeons & Dragons. It provides a rich, interactive experience for both the DM and players, supporting real-time updates, effect tracking, and marching order management.
 
@@ -61,7 +61,7 @@ WaveEchoCRAWL/
 - JavaScript enabled
 
 ## Credits
-- Inspired by Keith Amman's book "So You Want to Be a Game Master"
+- Inspired by Justin Alexander's book "So You Want to Be a Game Master"
 - Tailwind CSS for styling
 - D&D 5e resources from Flee Mortals and Monster Manual Expanded
 
